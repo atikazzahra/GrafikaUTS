@@ -1,0 +1,17 @@
+// class parser
+#ifndef PARSER_H
+#define PARSER_H
+
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include "line.h"
+
+using namespace std;
+
+
+class Rolling {
+public :
+	
+};
