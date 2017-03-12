@@ -1,7 +1,7 @@
 #ifndef SCREEN_H
 #define SCREEN_H
 
-#include "Line.h"
+#include "line.h"
 #include "LineDetails.h"
 
 /// Constants for Screen's border color
@@ -132,6 +132,7 @@ class Screen {
 		
 			for(list<LineDetails*>::iterator it = l.begin(); it != l.end(); it++) {
 							
+				//Count absolute point position on screen
 				newx1 = world.originX + (*it)->x1 * world.width;
 				newy1 = world.originY + (*it)->y1 * world.height;
 				newx2 = world.originX + (*it)->x2 * world.width;
@@ -187,10 +188,13 @@ class Screen {
 							newy2 = yn;
 							tmp2 = CohenSutherPos(newx2, newy2, view.originX,  view.originY, (view.originX+view.width), (view.originY+view.height));
 						}
-						
 					}
 				}
 			}
+			float centerX = originX + (0.5 * width);
+			float centerY = originY + (0.5 * height);
+			lineManager.insertLine(centerX-1,centerY-1,centerX+1,centerY+1,120,255,60);
+			lineManager.insertLine(centerX-1,centerY+1,centerX+1,centerY-1,120,255,60);
 		}
 		
 		//DefineCase

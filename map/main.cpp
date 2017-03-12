@@ -23,7 +23,7 @@ void drawTree(int x, int y, list<LineDetails*> listLine) {
 }
 
 int main() {
-	int varZoom = 3;
+	int varZoom = 18;
 	// Big screen
 	// !!! width:height ratio = 4:3
 	int bigScreenWidth = 415;
@@ -38,11 +38,11 @@ int main() {
 	
 	//ZOOM Screen
 	// size relative to bigscreen
-	int zoomScreenWidth = bigScreenWidth/3;
-	int zoomScreenHeight = bigScreenHeight/3;	
+	int zoomScreenWidth = bigScreenWidth/varZoom;
+	int zoomScreenHeight = bigScreenHeight/varZoom;	
 	Screen zoomScreen = Screen(0, 0, zoomScreenWidth, zoomScreenHeight);
-	int xa = 0; 
-	int ya = 0;
+	int xa = bigScreenWidth * 3 / 8; 
+	int ya = bigScreenHeight * 8 / 10;
 	
 	//List of LineDetails
 	int plus=0;
@@ -171,7 +171,7 @@ int main() {
 			}
 			smallScreen.renderSmall(listLine, zoomScreen, bigScreen,255,255,255);			
 		}
-		if (treeDisplay) {
+		if (!treeDisplay) {
 			for(list<LineDetails*>::iterator it = listTree.begin(); it != listTree.end(); it++) {
 				bigScreen.renderLine((*it),0,255,0);
 			}
@@ -183,7 +183,7 @@ int main() {
 			}
 			smallScreen.renderSmall(listPath, zoomScreen, bigScreen,0,0,255);
 		}
-		if (flowerDisplay) {
+		if (!flowerDisplay) {
 			for(list<LineDetails*>::iterator it = listFlower.begin(); it != listFlower.end(); it++) {
 				bigScreen.renderLine((*it),255,0,0);
 			}
@@ -199,7 +199,7 @@ int main() {
 		switch(ch){
 		case 'a':
 		  if (xa>0) { 
-		  xa--;
+		  xa-= 3;
 		  zoomScreen.renderBorderCol(0,0,0);
 		  zoomScreen.changeOrigin(xa,ya);
 		  zoomScreen.renderBorder();
@@ -208,7 +208,7 @@ int main() {
 		case 'd':
 		//smallScreen.renderSmall(listLine, zoomScreen, bigScreen,0,0,0);
 		  if (xa+zoomScreenWidth<bigScreenWidth) {
-		  xa++;
+		  xa+= 3;
 		  zoomScreen.renderBorderCol(0,0,0);
 		  zoomScreen.changeOrigin(xa,ya);
 		  zoomScreen.renderBorder();
@@ -217,7 +217,7 @@ int main() {
 		case 'w':
 		//smallScreen.renderSmall(listLine, zoomScreen, bigScreen,0,0,0);
 		  if (ya>0) {
-		  ya--;
+		  ya-=3;
 		  zoomScreen.renderBorderCol(0,0,0);
 		  zoomScreen.changeOrigin(xa,ya);
 		  zoomScreen.renderBorder();
@@ -226,7 +226,7 @@ int main() {
 		case 's':
 		//smallScreen.renderSmall(listLine, zoomScreen, bigScreen,0,0,0);
 		  if (ya+zoomScreenHeight<bigScreenHeight) {
-		  ya++;
+		  ya+=3;
 		  zoomScreen.renderBorderCol(0,0,0);
 		  zoomScreen.changeOrigin(xa,ya);
 		  zoomScreen.renderBorder();
@@ -235,6 +235,7 @@ int main() {
 		case 'i':
 		//smallScreen.renderSmall(listLine, zoomScreen, bigScreen,0,0,0);
 		  //3 6 9 18 60 102
+		  /*
 		  if (varZoom == 3) {
 				varZoom = 6;
 		  }
@@ -255,8 +256,10 @@ int main() {
 		  zoomScreenWidth = bigScreenWidth/varZoom;
 		  zoomScreenHeight = bigScreenHeight/varZoom;	
 		  zoomScreen = Screen(xa, ya, zoomScreenWidth, zoomScreenHeight);
+		  */
 		break;
 		case 'o':
+		/*
 		//smallScreen.renderSmall(listLine, zoomScreen, bigScreen,0,0,0);
 		  if (varZoom == 105) {
 				varZoom = 60;
@@ -277,7 +280,8 @@ int main() {
 		  }
 		  zoomScreenWidth = bigScreenWidth/varZoom;
 		  zoomScreenHeight = bigScreenHeight/varZoom;
-		  zoomScreen = Screen(xa, ya, zoomScreenWidth, zoomScreenHeight);		
+		  zoomScreen = Screen(xa, ya, zoomScreenWidth, zoomScreenHeight);
+		  */	
 		break;
 		case 'z':
 			if (lineDisplay == 1){

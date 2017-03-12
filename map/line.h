@@ -1,7 +1,7 @@
 #ifndef LINE_H
 #define LINE_H
 
-#include "Framebuffer.h"
+#include "framebuffer.h"
 using namespace std;
 
 class Line : public Framebuffer {
