@@ -13,13 +13,14 @@ using namespace std;
 
 class Screen {
 	private:
+		Line lineManager;	// this variable manages drawing lines in screen
+
+	public:
 		int originX;		// x-coordinate of screen's origin point
 		int originY;		// y-coordinate of screen's origin point
 		int width;			// screen's width
 		int height;			// screen's height
-		Line lineManager;	// this variable manages drawing lines in screen
 
-	public:
 		/// Constructor
 		Screen(int originX, int originY, int width, int height) {
 			this->originX = originX;
@@ -130,6 +131,8 @@ class Screen {
 			float newx1,newx2,newy1,newy2,xn,yn;
 			int outX, outY,outR,cek=0;
 		
+			float centerX = originX + (0.5 * width);
+			float centerY = originY + (0.5 * height);
 			for(list<LineDetails*>::iterator it = l.begin(); it != l.end(); it++) {
 							
 				//Count absolute point position on screen
@@ -140,8 +143,7 @@ class Screen {
 								
 				tmp1 = CohenSutherPos(newx1, newy1, view.originX,  view.originY, (view.originX+view.width), (view.originY+view.height));
 				tmp2 = CohenSutherPos(newx2, newy2, view.originX,  view.originY, (view.originX+view.width), (view.originY+view.height));
-				cek = 0;	
-				
+				cek = 0;
 				//CLIPPING		
 				while (!cek){
 					if ((tmp1 == 0) && (tmp2 == 0)) {
@@ -191,8 +193,6 @@ class Screen {
 					}
 				}
 			}
-			float centerX = originX + (0.5 * width);
-			float centerY = originY + (0.5 * height);
 			lineManager.insertLine(centerX-1,centerY-1,centerX+1,centerY+1,120,255,60);
 			lineManager.insertLine(centerX-1,centerY+1,centerX+1,centerY-1,120,255,60);
 		}

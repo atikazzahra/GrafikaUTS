@@ -41,7 +41,7 @@ int main() {
 	int zoomScreenWidth = bigScreenWidth/varZoom;
 	int zoomScreenHeight = bigScreenHeight/varZoom;	
 	Screen zoomScreen = Screen(0, 0, zoomScreenWidth, zoomScreenHeight);
-	int xa = bigScreenWidth * 3 / 8; 
+	int xa = (bigScreenWidth * 3 / 8) + 10; 
 	int ya = bigScreenHeight * 8 / 10;
 	
 	//List of LineDetails
@@ -51,6 +51,7 @@ int main() {
 	list<LineDetails*> listTree;
 	list<LineDetails*> listPath;
 	list<LineDetails*> listFlower;
+	list<LineDetails*> listGoal;
 	bool lineDisplay = 1;
 	bool treeDisplay = 1;
 	bool pathDisplay = 1;
@@ -156,6 +157,29 @@ int main() {
 
 	flowerfile.close();
 	
+	//Draw Goal
+	fstream goalfile("coordinat_goal.txt", std::ios_base::in);
+
+	list<int> intListG;
+	
+	int e;
+    while (goalfile >> e)
+    {
+        intListG.push_back(e);
+    }
+
+	loop = 0;
+    for (std::list<int>::iterator it = intListG.begin(); it != intListG.end(); ++it) {
+		temp[loop] = *it;
+		loop++;
+		if (loop == 4) {
+			listGoal.push_back(new LineDetails(getRatio(temp[0]), getRatio(temp[1]), getRatio(temp[2]), getRatio(temp[3])));
+			loop = 0;
+		}
+	}
+
+	goalfile.close();
+	
 	//Next Step
 	system("clear"); 
 	initscr();
@@ -171,7 +195,7 @@ int main() {
 			}
 			smallScreen.renderSmall(listLine, zoomScreen, bigScreen,255,255,255);			
 		}
-		if (!treeDisplay) {
+		if (treeDisplay) {
 			for(list<LineDetails*>::iterator it = listTree.begin(); it != listTree.end(); it++) {
 				bigScreen.renderLine((*it),0,255,0);
 			}
@@ -183,12 +207,46 @@ int main() {
 			}
 			smallScreen.renderSmall(listPath, zoomScreen, bigScreen,0,0,255);
 		}
-		if (!flowerDisplay) {
+		if (flowerDisplay) {
 			for(list<LineDetails*>::iterator it = listFlower.begin(); it != listFlower.end(); it++) {
 				bigScreen.renderLine((*it),255,0,0);
 			}
 			smallScreen.renderSmall(listFlower, zoomScreen, bigScreen,255,0,0);
 		}
+		else {
+			//Display at big screen
+			//for(list<LineDetails*>::iterator it = listGoal.begin(); it != listGoal.end(); it++) {
+			//	bigScreen.renderLine((*it),255,0,0);
+			//}
+			
+			//Display goal in small screen if flower and tree display is off
+			if (!treeDisplay) {
+				smallScreen.renderSmall(listGoal, zoomScreen, bigScreen,255,20,180);
+			}
+			
+			float centerX = zoomScreen.originX + zoomScreen.width;
+			float centerY = zoomScreen.originY + zoomScreen.height-12;
+			
+			//Check GOAL
+			for(list<LineDetails*>::iterator it = listGoal.begin(); it != listGoal.end(); it++) {
+				//printf("%f %f %f %f \n",(*it)->x1,(*it)->x2,(*it)->y1 * bigScreen.height,(*it)->y2 * bigScreen.height);
+				//printf("%f %f \n",centerX,centerY);
+				if (((*it)->y1) >= ((*it)->y2)){
+					if ((centerY < ((*it)->y1 * bigScreen.height)) && (centerY > ((*it)->y2 * bigScreen.height))){
+						//Screen Change
+						exit(1);
+					}
+				}
+				else {
+					if ((centerY > ((*it)->y1 * bigScreen.height)) && (centerY < ((*it)->y2 * bigScreen.height))){
+						//Screen Change
+						exit(1);
+					}
+				}
+				//exit(1);
+			}
+		}
+
 		bigScreen.renderBorder();
 		smallScreen.renderBorder();
 		zoomScreen.renderBorder();
@@ -199,7 +257,7 @@ int main() {
 		switch(ch){
 		case 'a':
 		  if (xa>0) { 
-		  xa-= 3;
+		  xa--;
 		  zoomScreen.renderBorderCol(0,0,0);
 		  zoomScreen.changeOrigin(xa,ya);
 		  zoomScreen.renderBorder();
@@ -208,7 +266,7 @@ int main() {
 		case 'd':
 		//smallScreen.renderSmall(listLine, zoomScreen, bigScreen,0,0,0);
 		  if (xa+zoomScreenWidth<bigScreenWidth) {
-		  xa+= 3;
+		  xa++;
 		  zoomScreen.renderBorderCol(0,0,0);
 		  zoomScreen.changeOrigin(xa,ya);
 		  zoomScreen.renderBorder();
@@ -217,7 +275,7 @@ int main() {
 		case 'w':
 		//smallScreen.renderSmall(listLine, zoomScreen, bigScreen,0,0,0);
 		  if (ya>0) {
-		  ya-=3;
+		  ya--;
 		  zoomScreen.renderBorderCol(0,0,0);
 		  zoomScreen.changeOrigin(xa,ya);
 		  zoomScreen.renderBorder();
@@ -226,7 +284,7 @@ int main() {
 		case 's':
 		//smallScreen.renderSmall(listLine, zoomScreen, bigScreen,0,0,0);
 		  if (ya+zoomScreenHeight<bigScreenHeight) {
-		  ya+=3;
+		  ya++;
 		  zoomScreen.renderBorderCol(0,0,0);
 		  zoomScreen.changeOrigin(xa,ya);
 		  zoomScreen.renderBorder();
