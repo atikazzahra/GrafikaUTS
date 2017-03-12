@@ -379,7 +379,6 @@ public:
 	}
 
 	void setColor(Color c, Point& p){
-
         setColor(c.getR(), c.getG(), c.getB(), p.getX(), p.getY());
 	}
 
@@ -443,6 +442,7 @@ public:
     	int ysize = f.getYSize();
     	int xmin = f.getXMin();
     	int ymin = f.getYMin();
+    	printf("%d, %d, %d, %d\n", xsize, ysize, xmin, ymin);
 		for(int i = 0; i < xsize;i++){
 			for(int j = 0; j<ysize; j++){
 				set(f.get(i, j), i+xmin, j+ymin);

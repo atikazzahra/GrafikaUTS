@@ -4,20 +4,25 @@
 
 #include <iostream>
 #include <string>
+#include "circle.h"
 #include "line.h"
 
 using namespace std;
 
-
 class Rolling {
-public :
-        Point p1, p2;
-        Color c;
-        int thick;
-        
+public :	
         Rolling(){}
-        
         bool startGame(){
+			FramePanel p(900, 500, 200, 80);
+			Framebuffer fp;
+			while(1) {
+				Circle Ball1(20, 800, 970, 1);
+				Ball1.draw(&p);
+		   
+				fp.drawFrame(p);
+				fp.Draw();
+				p.EmptyFrame();
+			}
 			return false;
 		}
 };

@@ -63,8 +63,6 @@ class Poligon : public Shape
             }
         }
 
-       
-
         Color getLineColor(){
             return LineColor;
         }
@@ -107,7 +105,6 @@ class Poligon : public Shape
             }
         }
 
-
          void drawTree(Point p) {
             Line a,b,c,d,e;
 
@@ -126,7 +123,39 @@ class Poligon : public Shape
             
             setAllLineColor();
         }
-
+        
+         void drawPlayer(Point p) {
+            Line a,b,c,d,e, a2, a3, a4, k1, k2;
+                        
+            k1 = Line(Point(p.getX()-10,p.getY()), Point(p.getX(),p.getY()-20));
+            k2 = Line(Point(p.getX(),p.getY()-20), Point(p.getX()+10,p.getY()));
+            a = Line(Point(p.getX(),p.getY()-20), Point(p.getX(),p.getY()-30));
+            a2 = Line(Point(p.getX()-10,p.getY()-30), Point(p.getX()+10,p.getY()-30));
+            a3 = Line(Point(p.getX()+10,p.getY()-30), Point(p.getX(),p.getY()-30));
+            a4 = Line(Point(p.getX(),p.getY()-30), Point(p.getX(),p.getY()-40));
+            
+            b = Line(Point(p.getX()-10,p.getY()-40),Point(p.getX()+10,p.getY()-40));
+            c = Line(Point(p.getX()-10,p.getY()-40),Point(p.getX()-10,p.getY()-52));
+            d = Line(Point(p.getX()-10,p.getY()-52),Point(p.getX()+10,p.getY()-52));
+            e = Line(Point(p.getX()+10,p.getY()-40),Point(p.getX()+10,p.getY()-52));
+            
+            arr_Line.push_back(a);
+            arr_Line.push_back(k1);
+            arr_Line.push_back(k2);
+            arr_Line.push_back(a2);
+            arr_Line.push_back(a3);
+            arr_Line.push_back(a4);
+            arr_Line.push_back(b);
+            arr_Line.push_back(c);
+            arr_Line.push_back(d);
+            arr_Line.push_back(e);
+            (*this).setLineColor(Color::GREEN);
+            (*this).setThickness(1);
+            
+            setAllLineColor();
+        }
+        
+        
         void setAllLineColor(){
             for(int i = 0; i<arr_Line.size(); i++){
                 arr_Line[i].setColor(LineColor);

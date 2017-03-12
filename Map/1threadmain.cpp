@@ -1,6 +1,7 @@
 #include <iostream>
 #include "poligon.h"
 #include "parser.h"
+#include "circle.h"
 
 int main(int argc, char** argv){
     FramePanel panelSmall(100, 100, 50, 50);
@@ -76,6 +77,9 @@ int main(int argc, char** argv){
             for(int i = 0; i < v.size(); i++){
                 Poligon Shape = Poligon();
                 Shape.makeLineFromArrPoint(v[i]);
+                Circle Ball1(10, 200, 200, 1);
+				Ball1.draw(&panelBig);
+                printf("green %d, %d, %d\n", (int)(Shape.getLineColor()).getB(),(int)(Shape.getLineColor()).getG(),(int)(Shape.getLineColor()).getR());
                 vPoligon.push_back(Shape);
                 Shape.draw(&panelMain);
             }
@@ -99,6 +103,7 @@ int main(int argc, char** argv){
                 Poligon Shape = Poligon();
                 Shape.makeLineFromArrPoint(PJalan[i]);
                 Shape.setLineColor(Color::RED);
+               
                 Shape.setAllLineColor();
                 vPoligon.push_back(Shape);
                 Shape.draw(&panelMain);
@@ -117,6 +122,7 @@ int main(int argc, char** argv){
         for(int i = 0; i<size;i++){
             vPoligon[i].drawInside(&panelSmall, &panelBig);
         }
+       
         fp.drawFrame(panelMain);
         fp.drawFrame(panelMiniMap);
         fp.drawFrame(panelBig);

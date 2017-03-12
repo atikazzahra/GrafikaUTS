@@ -209,6 +209,7 @@ class Line : public Shape
             }
         }
 
+
         void scaleLine(float sx, float sy, const Point& center = Point()){
             p1.Scale(sx, sy, center);
             p2.Scale(sx, sy, center);
