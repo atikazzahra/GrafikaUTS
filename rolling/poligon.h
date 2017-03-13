@@ -124,7 +124,7 @@ class Poligon : public Shape
             setAllLineColor();
         }
         
-         void drawPlayer(Point p) {
+         void drawPlayer(Point p, Color clr) {
             Line a,b,c,d,e, a2, a3, a4, k1, k2;
                         
             k1 = Line(Point(p.getX()-10,p.getY()), Point(p.getX(),p.getY()-20));
@@ -149,7 +149,7 @@ class Poligon : public Shape
             arr_Line.push_back(c);
             arr_Line.push_back(d);
             arr_Line.push_back(e);
-            (*this).setLineColor(Color::GREEN);
+            (*this).setLineColor(clr);
             (*this).setThickness(1);
             
             setAllLineColor();
@@ -192,9 +192,14 @@ class Poligon : public Shape
                 }
             }
         }
-
-    private:
         std::vector<Line> arr_Line;
+        void emptyVector(){
+            while (!arr_Line.empty()){
+                arr_Line.pop_back();
+            }
+        }
+    private:
+        
         int thickness;
         Color floodfill;
         Color LineColor;

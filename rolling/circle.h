@@ -6,9 +6,10 @@
 #include "framebuffer.h"
 
 using namespace std;
-
+float PI = 3.14;
 class Circle
 {
+
     public:
 		int r, xc, yc, full;
 		Circle(int a, int b, int c, int d){
@@ -36,7 +37,7 @@ class Circle
 		return (x * s + y * c) + cy;
 		}
 		
-		void draw(FramePanel* a){
+		bool draw(FramePanel* a, Color clr){
 		/* r = jari-jari; xc = koordinar X pusat lingkaran;
 		 * yc= koordinat Y pusat lingkaran;
 		 * full = 1: lingkaran penuh, 0: setengah lingkaran bgn atas;
@@ -45,6 +46,8 @@ class Circle
 			int xn=0, yn=r;
 			int p = 3-2*r; 
 
+			//kalo gaada collision=true;
+			bool retval=true;
 			while (xn<yn){
 				xn++;
 				if (p>=0){
@@ -56,9 +59,40 @@ class Circle
 				int x3=xn;
 				int y3=yn*(-1)+0.5*r;
 				//Sisi kanan atas
-				printf("coba ah %d", (*a).getXSize());
+
+				//pengecekan collision
+				if (!(a->get(x3+xc, y3+yc)==Color::BLACK)){
+					a->get(x3+xc, y3+yc).printColor();
+					retval=false;
+
+				}
+				/*if (!(a->get(-1*y3+xc+0.5*r,-1*x3+yc+0.5*r)==Color::BLACK)){
+					a->get(-1*y3+xc+0.5*r,-1*x3+yc+0.5*r).printColor();
+					printf("222222222222222\n");
+					retval=false;
+				}*/
+				if (!(a->get(x3*(-1)+xc,y3+yc)==Color::BLACK)){
+					retval=false;
+				}
+				if (!(a->get(y3+xc-0.5*r,-1*x3+yc+0.5*r)==Color::BLACK)){
+					retval=false;
+				}
+				if (!(a->get(xn+xc,yn+yc+0.5*r)==Color::BLACK)){
+					retval=false;
+				}
+				if (!(a->get(yn+xc,xn+yc+0.5*r)==Color::BLACK)){
+					retval=false;
+				}
+				if (!(a->get(-1*x3+xc,-1*y3+yc+r)==Color::BLACK)){
+					retval=false;
+				}
+				if (!(a->get(y3+xc-0.5*r,x3+yc+0.5*r)==Color::BLACK)){
+					retval=false;
+				}
+
+
 				(*a).set(Color(255, 255, 255), x3+xc, y3+yc);
-				printf(" coba lagi %d, %d = %d %d %d\n", x3+xc, y3+yc, (int)((*a).get(x3+xc, y3+yc)).getB(),(int)((*a).get(x3+xc, y3+yc)).getG(),(int)((*a).get(x3+xc, y3+yc)).getR());
+				
 				(*a).set((Color::GREEN), -1*y3+xc+0.5*r,-1*x3+yc+0.5*r);
 				
 				//Sisi kiri atas
@@ -75,6 +109,7 @@ class Circle
 					(*a).set((Color::GREEN), y3+xc-0.5*r,x3+yc+0.5*r);
 				}
 			}
+			return retval;
 		}
 		
 		void Bounce(Point start, Point fin){

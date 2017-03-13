@@ -100,6 +100,9 @@ private:
 class Color
 {
 public:
+
+
+
 	Color() : r(0), g(0), b(0), a(0) {}
 
 	Color(char r, char g, char b)
@@ -133,6 +136,31 @@ public:
 
         return *this;
 	}
+
+
+	bool operator==(const Color &c){
+        if ((c.r==this->r) && (c.b==this->b)){
+        	return true;
+        }
+        else
+        {
+        	return false;
+        }
+	}
+
+
+	bool operator!=(const Color &c){
+        if(*this == c){
+            return false;
+        }else{
+            return true;
+        }
+	}
+
+	void printColor(){
+		printf("%d, %d, %d\n", (int)b, (int)g, (int)r);
+	}
+
 
 	char getR()
 	{
@@ -176,7 +204,7 @@ public:
 
 	static const Color WHITE, BLUE, RED, GREEN, BLACK;
 
-private:
+
 	char r;
 	char g;
 	char b;
