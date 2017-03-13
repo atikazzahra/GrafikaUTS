@@ -4,7 +4,6 @@
 #include "parser.h"
 #include <pthread.h>
 #include <termios.h>
-#include "Matrix.h"
 
 static struct termios oldt;
 
@@ -33,7 +32,6 @@ std::vector<std::vector<Point> > PPencil;
 std::vector<std::vector<Point> > PBullet;
 std::vector<std::vector<Point> > PTarget;
 
-Matrix matrixOfLineCoordinate(1355, 750);
 
 FramePanel panelSmall(100, 100, 50, 50);
 FramePanel panelBig(500, 500, 500, 0);
