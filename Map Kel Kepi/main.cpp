@@ -392,8 +392,7 @@ bool isCollison(std::vector<std::vector<Point> > obj, Color color) {
     return false;
 }
 
-/* flood fill algorithm
-    baru bisa buat fill pencil doang, karena gambar pensilnya bocor, jadi bates minimal harus shooterXPos*/
+/* flood fill algorithm*/
 void floodFill(FramePanel * vp, int x, int y, Color color) {
     int tempX, tempY;
     // printf("x %d y %d xmin %d ymin %d\n", x, y, shooterXPos - 7, shooterYPos + 10);
