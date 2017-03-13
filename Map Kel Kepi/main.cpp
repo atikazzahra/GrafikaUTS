@@ -39,6 +39,8 @@ FramePanel panelMiniMap(100, 100, 250, 600);
 FramePanel panelForShooter(1355, 750, 0, 0);
 
 int score = 0, level = 1, shooterXPos = 87, shooterYPos = 624, nBullet;
+int kpIdx = 0;
+int utsIdx = 0;
 bool isEnd = false;
 char c;
 
@@ -232,7 +234,23 @@ void drawTarget() {
 }
 
 void drawUTS() {
-    for (int i = 0; i < PTarget.size(); i++) {
+    for (int i = 0; i < PUts.size(); i++) {
+		if (utsIdx % 2 == 0) {
+			for (int j = 0; j < PUts[i].size(); j++) {
+				PUts[i][j].setX(PUts[i][j].getX() + 10);
+				PUts[i][j].setY(PUts[i][j].getY() + 12);
+			}
+		} else {
+			for (int j = 0; j < PUts[i].size(); j++) {
+				PUts[i][j].setX(PUts[i][j].getX() + 10);
+				PUts[i][j].setY(PUts[i][j].getY() - 6);	
+			}			
+		}
+		if (PUts[0][0].getX() > 1400) {
+			isEnd = true; //Kalah
+		}
+		utsIdx++;
+
         Poligon shape = Poligon();
         shape.makeLineFromArrPoint(PUts[i]);
         shape.setLineColor(Color::RED);
@@ -243,6 +261,13 @@ void drawUTS() {
 
 void drawTubes() {
     for (int i = 0; i < PTubes.size(); i++) {
+		for (int j = 0; j < PTubes[i].size(); j++) {
+			PTubes[i][j].setX(PTubes[i][j].getX() + 8);
+			PTubes[i][j].setY(PTubes[i][j].getY() + 8);
+		}
+		if (PTubes[0][0].getX() > 1400) {
+			isEnd = true; //Kalah
+		}
         Poligon shape = Poligon();
         shape.makeLineFromArrPoint(PTubes[i]);
         shape.setLineColor(Color::RED);
@@ -253,6 +278,19 @@ void drawTubes() {
 
 void drawKP() {
     for (int i = 0; i < PCompany.size(); i++) {
+		if (kpIdx % 2 == 0) {
+			for (int j = 0; j < PCompany[i].size(); j++) {
+				PCompany[i][j].setX(PCompany[i][j].getX() + 10);
+			}
+		} else {
+			for (int j = 0; j < PCompany[i].size(); j++) {
+				PCompany[i][j].setY(PCompany[i][j].getY() + 10);
+			}			
+		}
+		if (PCompany[0][0].getX() > 1400) {
+			isEnd = true; //Kalah
+		}
+		kpIdx++;
         Poligon shape = Poligon();
         shape.makeLineFromArrPoint(PCompany[i]);
         shape.setLineColor(Color::RED);
@@ -263,6 +301,12 @@ void drawKP() {
 
 void drawQuiz() {
     for (int i = 0; i < PQuiz.size(); i++) {
+		for (int j = 0; j < PQuiz[i].size(); j++) {
+			PQuiz[i][j].setX(PQuiz[i][j].getX() + 5);
+		}
+		if (PQuiz[0][0].getX() > 1400) {
+			isEnd = true; //Kalah
+		}
         Poligon shape = Poligon();
         shape.makeLineFromArrPoint(PQuiz[i]);
         shape.setLineColor(Color::RED);
@@ -384,6 +428,11 @@ int main(int argc, char** argv){
     // poliRoad();
     // poliPlant();
     // poliBuild();
+	PQuiz = quiz.getPoints();
+	PTubes = tubes.getPoints();
+	PCompany = company.getPoints();
+	PUts = uts.getPoints();
+
 
     pthread_t t_shoot;
     pthread_create(&t_shoot, NULL, shoot, NULL);
@@ -404,11 +453,10 @@ int main(int argc, char** argv){
         //     drawRoad();
         // }
 
-        if (level == 1) PTarget = quiz.getPoints();
-        else if (level == 2) PTarget = tubes.getPoints();
-        else if (level == 3) PTarget = company.getPoints();
-        else if (level == 4) PTarget = uts.getPoints();
-        drawTarget();
+        if (level == 1) drawQuiz();
+        else if (level == 2) drawTubes();
+        else if (level == 3) drawKP();
+        else if (level == 4) drawUTS();
         //Minimap
 
         bool isCollide = isCollison(PBullet, Color::RED); 
