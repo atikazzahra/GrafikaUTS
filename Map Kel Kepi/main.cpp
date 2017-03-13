@@ -38,7 +38,7 @@ FramePanel panelBig(500, 500, 500, 0);
 FramePanel panelMiniMap(100, 100, 250, 600);
 FramePanel panelForShooter(1355, 750, 0, 0);
 
-int score = 0, level = 1, shooterXPos = 87, shooterYPos = 624, nBullet;
+int score = 0, level = 1, shooterXPos = 109, shooterYPos = 548, nBullet;
 int kpIdx = 0;
 int utsIdx = 0;
 bool isEnd = false;
@@ -126,30 +126,30 @@ void *controller(void *args){
             shooterXPos += 5;
             c = '.';
         }
-        else if (c == 'f') {
-            for (int i = 0; i < PPencil.size(); i++) {
-                for (int j = 0; j < PPencil[i].size(); j++) {
-                    Point p = PPencil[i].at(0);
-                    PPencil[i].erase(PPencil[i].begin());
-                    p.setY(p.getY() + 5);
-                    PPencil[i].push_back(p);
-                }
-            }
-            shooterYPos += 5;
-            c = '.';
-        }
-        else if (c == 'r') {
-            for (int i = 0; i < PPencil.size(); i++) {
-                for (int j = 0; j < PPencil[i].size(); j++) {
-                    Point p = PPencil[i].at(0);
-                    PPencil[i].erase(PPencil[i].begin());
-                    p.setY(p.getY() - 5);
-                    PPencil[i].push_back(p);
-                }
-            }
-            shooterYPos -= 5;
-            c = '.';
-        }
+        // else if (c == 'f') {
+        //     for (int i = 0; i < PPencil.size(); i++) {
+        //         for (int j = 0; j < PPencil[i].size(); j++) {
+        //             Point p = PPencil[i].at(0);
+        //             PPencil[i].erase(PPencil[i].begin());
+        //             p.setY(p.getY() + 5);
+        //             PPencil[i].push_back(p);
+        //         }
+        //     }
+        //     shooterYPos += 5;
+        //     c = '.';
+        // }
+        // else if (c == 'r') {
+        //     for (int i = 0; i < PPencil.size(); i++) {
+        //         for (int j = 0; j < PPencil[i].size(); j++) {
+        //             Point p = PPencil[i].at(0);
+        //             PPencil[i].erase(PPencil[i].begin());
+        //             p.setY(p.getY() - 5);
+        //             PPencil[i].push_back(p);
+        //         }
+        //     }
+        //     shooterYPos -= 5;
+        //     c = '.';
+        // }
         else if(c == 'm'){
             break;
         }
@@ -392,6 +392,45 @@ bool isCollison(std::vector<std::vector<Point> > obj, Color color) {
     return false;
 }
 
+/* flood fill algorithm
+    baru bisa buat fill pencil doang, karena gambar pensilnya bocor, jadi bates minimal harus shooterXPos*/
+void floodFill(FramePanel * vp, int x, int y, Color color) {
+    int tempX, tempY;
+    // printf("x %d y %d xmin %d ymin %d\n", x, y, shooterXPos - 7, shooterYPos + 10);
+    if((x > 0) && (x < 1350) && (y > 0) && (y < 750)) {
+        tempX = x; tempY = y+1;
+        if (vp->get(tempX, tempY) == color) {
+        }
+        else {
+            vp->set(color, tempX, tempY);
+            floodFill(vp, tempX, tempY, color);
+        }
+        
+        tempX = x; tempY = y-1;
+        if (vp->get(tempX, tempY) == color) {
+        }
+        else {
+            vp->set(color, tempX, tempY);
+            floodFill(vp, tempX, tempY, color);
+        }
+        tempX = x+1; tempY = y;
+        if (vp->get(tempX, tempY) == color) {
+        }
+        else {
+            vp->set(color, tempX, tempY);
+            floodFill(vp, tempX, tempY, color);
+        }
+        
+        tempX = x-1; tempY = y;
+        if (vp->get(tempX, tempY) == color) {
+        }
+        else {
+            vp->set(color, tempX, tempY);
+            floodFill(vp, tempX, tempY, color);
+        }
+    }
+}
+
 /*Digunakan biar gak perlu pencet enter lagi
 Dimasukin kedalem loop yang di main*/
 void restore_terminal_settings(void)
@@ -464,6 +503,8 @@ int main(int argc, char** argv){
         else if (isCollide) level++;
 
         drawPencil();
+        floodFill(&panelForShooter, shooterXPos, 580, Color::WHITE);
+        // floodFill(shooterXPos - 6, 17, Color::WHITE);
         moveVertical(&PBullet, -10);
         // for(int i = 0; i < vPoligon.size(); i++){
         //     Poligon Shape = Poligon();
