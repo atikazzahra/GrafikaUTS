@@ -30,7 +30,6 @@ std::vector<std::vector<Point> > PTubes;
 Parser pencil;
 std::vector<std::vector<Point> > PPencil;
 std::vector<std::vector<Point> > PBullet;
-std::vector<std::vector<Point> > PTarget;
 
 
 FramePanel panelSmall(100, 100, 50, 50);
@@ -109,12 +108,10 @@ void *controller(void *args){
                     PPencil[i].push_back(p);
                 }
             }
-            shooterXPos -= 5;
+            shooterXPos -= 5; //pinddahin moncong pensil kekiri -5
             c = '.';
         }
         else if (c == 'g') {
-            // if (panelForShooter.getXMin() < 1350)
-            //     panelForShooter.setXMin(panelForShooter.getXMin() + 5);
             for (int i = 0; i < PPencil.size(); i++) {
                 for (int j = 0; j < PPencil[i].size(); j++) {
                     Point p = PPencil[i].at(0);
@@ -123,33 +120,9 @@ void *controller(void *args){
                     PPencil[i].push_back(p);
                 }
             }
-            shooterXPos += 5;
+            shooterXPos += 5; //pinddahin moncong pensil kekanan +5
             c = '.';
         }
-        // else if (c == 'f') {
-        //     for (int i = 0; i < PPencil.size(); i++) {
-        //         for (int j = 0; j < PPencil[i].size(); j++) {
-        //             Point p = PPencil[i].at(0);
-        //             PPencil[i].erase(PPencil[i].begin());
-        //             p.setY(p.getY() + 5);
-        //             PPencil[i].push_back(p);
-        //         }
-        //     }
-        //     shooterYPos += 5;
-        //     c = '.';
-        // }
-        // else if (c == 'r') {
-        //     for (int i = 0; i < PPencil.size(); i++) {
-        //         for (int j = 0; j < PPencil[i].size(); j++) {
-        //             Point p = PPencil[i].at(0);
-        //             PPencil[i].erase(PPencil[i].begin());
-        //             p.setY(p.getY() - 5);
-        //             PPencil[i].push_back(p);
-        //         }
-        //     }
-        //     shooterYPos -= 5;
-        //     c = '.';
-        // }
         else if(c == 'm'){
             break;
         }
@@ -217,20 +190,6 @@ void drawPencil() {
         shape.setAllLineColor();
         shape.draw(&panelForShooter);
     }
-}
-
-void drawTarget() {
-    for (int i = 0; i < PTarget.size(); i++) {
-        Poligon shape = Poligon();
-        shape.makeLineFromArrPoint(PTarget[i]);
-        shape.setLineColor(Color::RED);
-        shape.setAllLineColor();
-        shape.draw(&panelForShooter);
-    }
-
-    // for (int i = 1; i < PTarget.size(); i++) {
-    //     int x1 = P[i].at()
-    // }
 }
 
 void drawUTS() {
@@ -315,6 +274,8 @@ void drawQuiz() {
     }
 }
 
+/*pindahin object dari atas ke bawah dan sebaliknya
+    kalau mau dari atas ke bawah tanda dy +, sebaliknya - */
 void moveVertical(std::vector<std::vector<Point> > * P, int dy) {
     if (P->size() != 0) {
         Point p[P->size()][2];
@@ -322,15 +283,16 @@ void moveVertical(std::vector<std::vector<Point> > * P, int dy) {
         for(int i = 0; i < nBullet; i++) {
             p[i][0] = P[0][0].at(0);
             p[i][1] = P[0][0].at(1);
-            // P[i].erase(P[i].begin());
 
-            // printf("%d\n", (int) P[0][i].size());
-            // printf("%d\n", p[i][0].getY());
+            //kepala peluru ditambah dy
+            //ekor peluru ditambah dy
             p[i][0].setY(p[i][0].getY() + dy);
             p[i][1].setY(p[i][1].getY() + dy);
             std::vector<Point> pointVTemp;
             pointVTemp.push_back(p[i][0]);
             pointVTemp.push_back(p[i][1]);
+
+            //dihapus biar gak jadi panjang pelurunya
             P->erase(P->begin());
             P->push_back(pointVTemp);
 
@@ -349,9 +311,11 @@ void moveVertical(std::vector<std::vector<Point> > * P, int dy) {
     }
 }
 
+/*prosedur untuk membuat peluru (bukan gerakin dari bawah ke atas)
+    peluru dibuat dan dimasukkan kedalam vector
+    tujuannya biar bisa nembak beberapa kali dalam satu waktu
+*/
 void * shoot(void * arg) {
-    // int bulletYPos = shooterYPos;
-    // printf("%d\n", bulletYPos);
     while(!isEnd) {
         if (c == '\n') {
             int x[1] = {shooterXPos};
@@ -364,24 +328,23 @@ void * shoot(void * arg) {
                 pointVTemp.push_back(p2);
                 PBullet.push_back(pointVTemp);
             }
-            // printf("k\n");
             c = '.';
         }
     }
 }
 
+//cek tabrakan antara 2 object
 bool isCollison(std::vector<std::vector<Point> > obj, Color color) {
     if (obj.size() != 0) {
         for (int i = 0; i < obj.size(); i++) {
             Point p1 = obj[i].at(0);
             Point p2 = obj[i].at(1);
-            // printf("x %d y %d\n", p.getX(), p.getY());
-            // printf("%d %d %d\n", (int)panelForShooter.get(p).getR(), (int)panelForShooter.get(p).getG(), (int)panelForShooter.get(p).getB());
             int y = p2.getY();
+
+            //cek collison dari kepala peluru sampai ekor apakah ada yang kena ke object
             for (int j = 0; j < abs(p2.getY() - p1.getY()); j++) {
-                if (panelForShooter.get(p2.getX(), y) == color) {
+                if (panelForShooter.get(p2.getX(), y).equals(color)) {
                     PBullet.clear();
-                    // printf("d\n");
                     return true;
                 }
                 y++;    
@@ -395,35 +358,27 @@ bool isCollison(std::vector<std::vector<Point> > obj, Color color) {
 /* flood fill algorithm*/
 void floodFill(FramePanel * vp, int x, int y, Color color) {
     int tempX, tempY;
-    // printf("x %d y %d xmin %d ymin %d\n", x, y, shooterXPos - 7, shooterYPos + 10);
     if((x > 0) && (x < 1350) && (y > 0) && (y < 750)) {
         tempX = x; tempY = y+1;
-        if (vp->get(tempX, tempY) == color) {
-        }
-        else {
+        if (!vp->get(tempX, tempY).equals(color)) {
             vp->set(color, tempX, tempY);
             floodFill(vp, tempX, tempY, color);
         }
         
         tempX = x; tempY = y-1;
-        if (vp->get(tempX, tempY) == color) {
-        }
-        else {
+        if (!vp->get(tempX, tempY).equals(color)) {
             vp->set(color, tempX, tempY);
             floodFill(vp, tempX, tempY, color);
         }
+
         tempX = x+1; tempY = y;
-        if (vp->get(tempX, tempY) == color) {
-        }
-        else {
+        if (!vp->get(tempX, tempY).equals(color)) {
             vp->set(color, tempX, tempY);
             floodFill(vp, tempX, tempY, color);
         }
         
         tempX = x-1; tempY = y;
-        if (vp->get(tempX, tempY) == color) {
-        }
-        else {
+        if (!vp->get(tempX, tempY).equals(color)) {
             vp->set(color, tempX, tempY);
             floodFill(vp, tempX, tempY, color);
         }
@@ -502,8 +457,10 @@ int main(int argc, char** argv){
         else if (isCollide) level++;
 
         drawPencil();
+
+        //warnain pencil
         floodFill(&panelForShooter, shooterXPos, 580, Color::WHITE);
-        // floodFill(shooterXPos - 6, 17, Color::WHITE);
+
         moveVertical(&PBullet, -10);
         // for(int i = 0; i < vPoligon.size(); i++){
         //     Poligon Shape = Poligon();
@@ -531,8 +488,6 @@ int main(int argc, char** argv){
         panelMain.EmptyFrame();
         panelSmall.EmptyFrame();
         panelBig.EmptyFrame();
-        // printf("mas\n");
-        // usleep(500);
     }
     pthread_join(t_bullet, NULL);
     pthread_join(t_shoot, NULL);

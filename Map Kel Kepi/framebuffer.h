@@ -134,7 +134,7 @@ public:
         return *this;
 	}
 
-	bool operator==(const Color& c) {
+	bool equals(const Color& c) {
 		if (r == c.r && g == c.g && b == c.b && a == c.a) return true;
 		return false;
 	}
