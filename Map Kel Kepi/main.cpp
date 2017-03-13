@@ -4,6 +4,7 @@
 #include "parser.h"
 #include <pthread.h>
 #include <termios.h>
+#include "Matrix.h"
 
 static struct termios oldt;
 
@@ -30,6 +31,9 @@ std::vector<std::vector<Point> > PTubes;
 Parser pencil;
 std::vector<std::vector<Point> > PPencil;
 std::vector<std::vector<Point> > PBullet;
+std::vector<std::vector<Point> > PTarget;
+
+Matrix matrixOfLineCoordinate(1355, 750);
 
 FramePanel panelSmall(100, 100, 50, 50);
 FramePanel panelBig(500, 500, 500, 0);
@@ -37,10 +41,11 @@ FramePanel panelMiniMap(100, 100, 250, 600);
 FramePanel panelForShooter(1355, 750, 0, 0);
 
 int score = 0, level = 1, shooterXPos = 87, shooterYPos = 624, nBullet;
+bool isEnd = false;
 char c;
 
 void *controller(void *args){
-    while(1){
+    while(!isEnd){
         c = getchar();
         if (c == 'q'){
             bTree = true;
@@ -145,9 +150,6 @@ void *controller(void *args){
             shooterYPos -= 5;
             c = '.';
         }
-        else if (c == 't') {
-
-        }
         else if(c == 'm'){
             break;
         }
@@ -217,8 +219,22 @@ void drawPencil() {
     }
 }
 
+void drawTarget() {
+    for (int i = 0; i < PTarget.size(); i++) {
+        Poligon shape = Poligon();
+        shape.makeLineFromArrPoint(PTarget[i]);
+        shape.setLineColor(Color::RED);
+        shape.setAllLineColor();
+        shape.draw(&panelForShooter);
+    }
+
+    // for (int i = 1; i < PTarget.size(); i++) {
+    //     int x1 = P[i].at()
+    // }
+}
+
 void drawUTS() {
-    for (int i = 0; i < PUts.size(); i++) {
+    for (int i = 0; i < PTarget.size(); i++) {
         Poligon shape = Poligon();
         shape.makeLineFromArrPoint(PUts[i]);
         shape.setLineColor(Color::RED);
@@ -294,7 +310,7 @@ void moveVertical(std::vector<std::vector<Point> > * P, int dy) {
 void * shoot(void * arg) {
     // int bulletYPos = shooterYPos;
     // printf("%d\n", bulletYPos);
-    while(1) {
+    while(!isEnd) {
         if (c == '\n') {
             int x[1] = {shooterXPos};
             int y[2] = {shooterYPos, shooterYPos - 5};
@@ -310,6 +326,28 @@ void * shoot(void * arg) {
             c = '.';
         }
     }
+}
+
+bool isCollison(std::vector<std::vector<Point> > obj, Color color) {
+    if (obj.size() != 0) {
+        for (int i = 0; i < obj.size(); i++) {
+            Point p1 = obj[i].at(0);
+            Point p2 = obj[i].at(1);
+            // printf("x %d y %d\n", p.getX(), p.getY());
+            // printf("%d %d %d\n", (int)panelForShooter.get(p).getR(), (int)panelForShooter.get(p).getG(), (int)panelForShooter.get(p).getB());
+            int y = p2.getY();
+            for (int j = 0; j < abs(p2.getY() - p1.getY()); j++) {
+                if (panelForShooter.get(p2.getX(), y) == color) {
+                    PBullet.clear();
+                    // printf("d\n");
+                    return true;
+                }
+                y++;    
+            }
+        }
+    }
+
+    return false;
 }
 
 /*Digunakan biar gak perlu pencet enter lagi
@@ -340,23 +378,19 @@ int main(int argc, char** argv){
     parse2.parseAdi("jalan.txt");
     PJalan = parse2.getPoints();
     company.parseAdi("company.txt");
-    PCompany = company.getPoints();
     uts.parseAdi("UTS.txt");
-    PUts = uts.getPoints();
     quiz.parseAdi("quiz.txt");
-    PQuiz = quiz.getPoints();
     tubes.parseAdi("tubes.txt");
-    PTubes = tubes.getPoints();
     pencil.parseAdi("pencil.txt");
     PPencil = pencil.getPoints();
-    poliRoad();
-    poliPlant();
-    poliBuild();
+    // poliRoad();
+    // poliPlant();
+    // poliBuild();
 
     pthread_t t_shoot;
     pthread_create(&t_shoot, NULL, shoot, NULL);
     pthread_create(&t_bullet, NULL, controller, NULL);
-    while(1){
+    while(!isEnd){
     	disable_waiting_for_enter();
         //Draw Bangunan
         // if(bBuilding){   
@@ -372,14 +406,19 @@ int main(int argc, char** argv){
         //     drawRoad();
         // }
 
-        if (level == 1) drawQuiz();
-        else if (level == 2) drawTubes();
-        else if (level == 3) drawKP();
-        else if (level == 4) drawUTS();
+        if (level == 1) PTarget = quiz.getPoints();
+        else if (level == 2) PTarget = tubes.getPoints();
+        else if (level == 3) PTarget = company.getPoints();
+        else if (level == 4) PTarget = uts.getPoints();
+        drawTarget();
         //Minimap
 
+        bool isCollide = isCollison(PBullet, Color::RED); 
+        if (isCollide && level == 4) isEnd = true;
+        else if (isCollide) level++;
+
         drawPencil();
-        moveVertical(&PBullet, -5);
+        moveVertical(&PBullet, -10);
         // for(int i = 0; i < vPoligon.size(); i++){
         //     Poligon Shape = Poligon();
         //     Shape = vPoligon[i];
@@ -397,13 +436,16 @@ int main(int argc, char** argv){
         // a.drawFrame(panelMiniMap);
         // a.drawFrame(panelBig);
         // a.drawFrame(panelSmall);
+        
         a.drawFrame(panelForShooter);
-        a.Draw();
+        // a.Draw();
+        
 
         panelForShooter.EmptyFrame();
         panelMain.EmptyFrame();
         panelSmall.EmptyFrame();
         panelBig.EmptyFrame();
+        // printf("mas\n");
         // usleep(500);
     }
     pthread_join(t_bullet, NULL);

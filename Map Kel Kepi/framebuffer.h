@@ -134,6 +134,11 @@ public:
         return *this;
 	}
 
+	bool operator==(const Color& c) {
+		if (r == c.r && g == c.g && b == c.b && a == c.a) return true;
+		return false;
+	}
+
 	char getR()
 	{
 		return r;
@@ -438,6 +443,7 @@ public:
     		}
     	}
     }
+
     void drawFrame(FramePanel& f){
     	int xsize = f.getXSize();
     	int ysize = f.getYSize();
@@ -446,6 +452,7 @@ public:
 		for(int i = 0; i < xsize;i++){
 			for(int j = 0; j<ysize; j++){
 				set(f.get(i, j), i+xmin, j+ymin);
+				setColor(get(i, j), i, j);
 			}
 		}  
     }
