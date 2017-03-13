@@ -20,7 +20,7 @@ void drawTree(int x, int y, list<LineDetails*> listLine) {
 	listLine.push_back(new LineDetails(getRatio(x), getRatio(y-6), getRatio(x+3), getRatio(y)));
 	listLine.push_back(new LineDetails(getRatio(x+3), getRatio(y), getRatio(x-3), getRatio(y)));
 	//cout<<listLine.back()<<endl;
-}
+} 
 
 int main() {
 	int varZoom = 18;
@@ -52,6 +52,8 @@ int main() {
 	list<LineDetails*> listPath;
 	list<LineDetails*> listFlower;
 	list<LineDetails*> listGoal;
+	list<LineDetails*> listGoalIcon;
+	list<LineDetails*> listGoalClear;
 	bool lineDisplay = 1;
 	bool treeDisplay = 1;
 	bool pathDisplay = 1;
@@ -157,7 +159,7 @@ int main() {
 
 	flowerfile.close();
 	
-	//Draw Goal
+	//Draw Goal & GoalIcon
 	fstream goalfile("coordinat_goal.txt", std::ios_base::in);
 
 	list<int> intListG;
@@ -167,13 +169,23 @@ int main() {
     {
         intListG.push_back(e);
     }
-
+	
+	int xmid, ymid;
 	loop = 0;
     for (std::list<int>::iterator it = intListG.begin(); it != intListG.end(); ++it) {
 		temp[loop] = *it;
 		loop++;
 		if (loop == 4) {
 			listGoal.push_back(new LineDetails(getRatio(temp[0]), getRatio(temp[1]), getRatio(temp[2]), getRatio(temp[3])));
+			
+			//Determine epicenter of goal area
+			xmid = (temp[0]+temp[2])/2;
+			ymid = (temp[1]+temp[3])/2;
+			
+			//Draw marker of goal area
+			listGoalIcon.push_back(new LineDetails(getRatio(xmid), getRatio(ymid), getRatio(xmid), getRatio(ymid-1)));
+			listGoalIcon.push_back(new LineDetails(getRatio(xmid), getRatio(ymid), getRatio(xmid-1), getRatio(ymid+1)));
+			listGoalIcon.push_back(new LineDetails(getRatio(xmid), getRatio(ymid), getRatio(xmid+1), getRatio(ymid+1)));
 			loop = 0;
 		}
 	}
@@ -221,29 +233,70 @@ int main() {
 			
 			//Display goal in small screen if flower and tree display is off
 			if (!treeDisplay) {
-				smallScreen.renderSmall(listGoal, zoomScreen, bigScreen,255,20,180);
+				//smallScreen.renderSmall(listGoal, zoomScreen, bigScreen,255,20,180);
+				smallScreen.renderSmall(listGoalIcon, zoomScreen, bigScreen,255,255,0);
+				smallScreen.renderSmall(listGoalClear, zoomScreen, bigScreen,0,0,0);
 			}
-			
+			/*
 			float centerX = zoomScreen.originX + zoomScreen.width;
 			float centerY = zoomScreen.originY + zoomScreen.height-12;
+			*/
+			float centerX = zoomScreen.originX + zoomScreen.width/2;
+			float centerY = zoomScreen.originY + zoomScreen.height/2;
 			
-			//Check GOAL
-			for(list<LineDetails*>::iterator it = listGoal.begin(); it != listGoal.end(); it++) {
-				//printf("%f %f %f %f \n",(*it)->x1,(*it)->x2,(*it)->y1 * bigScreen.height,(*it)->y2 * bigScreen.height);
-				//printf("%f %f \n",centerX,centerY);
+			bool xIn, yIn;
+			xIn = false;
+			yIn = false;
+			
+			double xmid2,ymid2;
+			
+			//Check GOAL - whether player is within goal area or not
+			list<LineDetails*>::iterator it = listGoal.begin();
+			while (it != listGoal.end()) {
 				if (((*it)->y1) >= ((*it)->y2)){
 					if ((centerY < ((*it)->y1 * bigScreen.height)) && (centerY > ((*it)->y2 * bigScreen.height))){
-						//Screen Change
-						exit(1);
+						yIn = true;
+						//exit(1);
 					}
 				}
 				else {
 					if ((centerY > ((*it)->y1 * bigScreen.height)) && (centerY < ((*it)->y2 * bigScreen.height))){
-						//Screen Change
-						exit(1);
+						yIn = true;
+						//exit(1);
 					}
 				}
-				//exit(1);
+				if (((*it)->x1) >= ((*it)->x2)){
+					if ((centerX < ((*it)->x1 * bigScreen.height)) && (centerX > ((*it)->x2 * bigScreen.height))){
+						xIn = true;
+						//exit(1);
+					}
+				}
+				else {
+					if ((centerX > ((*it)->x1 * bigScreen.height)) && (centerX < ((*it)->x2 * bigScreen.height))){
+						xIn = true;
+						//exit(1);
+					}
+				}
+				//Player is in goal area
+				if (yIn && xIn) {
+					//Screen change; do stuff here
+					printf("get\n");
+					
+					//Remove goal marker
+					xmid2 = ((*it)->x1 + (*it)->x2)/2;
+					ymid2 = ((*it)->y1 + (*it)->y2)/2;
+					listGoalClear.push_back(new LineDetails(xmid2, ymid2, xmid2, ymid2 - getRatio(1)));
+					listGoalClear.push_back(new LineDetails(xmid2, ymid2, xmid2 - getRatio(1), ymid2 + getRatio(1)));
+					listGoalClear.push_back(new LineDetails(xmid2, ymid2, xmid2 + getRatio(1), ymid2 + getRatio(1)));
+					
+					//Remove goal area
+					listGoal.erase(it++);
+					
+					//exit(1);
+				}
+				else {
+					++it;
+				}
 			}
 		}
 

@@ -12,10 +12,8 @@
 using namespace std;
 
 class Screen {
-	private:
-		Line lineManager;	// this variable manages drawing lines in screen
-
 	public:
+		Line lineManager;	// this variable manages drawing lines in screen
 		int originX;		// x-coordinate of screen's origin point
 		int originY;		// y-coordinate of screen's origin point
 		int width;			// screen's width
