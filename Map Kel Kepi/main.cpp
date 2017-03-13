@@ -255,7 +255,7 @@ void drawUTS() {
         shape.makeLineFromArrPoint(PUts[i]);
         shape.setLineColor(Color::RED);
         shape.setAllLineColor();
-        shape.draw(&panelMain);
+        shape.draw(&panelForShooter);
     }
 }
 
@@ -272,7 +272,7 @@ void drawTubes() {
         shape.makeLineFromArrPoint(PTubes[i]);
         shape.setLineColor(Color::RED);
         shape.setAllLineColor();
-        shape.draw(&panelMain);
+        shape.draw(&panelForShooter);
     }
 }
 
@@ -295,7 +295,7 @@ void drawKP() {
         shape.makeLineFromArrPoint(PCompany[i]);
         shape.setLineColor(Color::RED);
         shape.setAllLineColor();
-        shape.draw(&panelMain);
+        shape.draw(&panelForShooter);
     }
 }
 
