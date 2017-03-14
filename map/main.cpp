@@ -227,9 +227,9 @@ int main() {
 		}
 		else {
 			//Display at big screen
-			//for(list<LineDetails*>::iterator it = listGoal.begin(); it != listGoal.end(); it++) {
-			//	bigScreen.renderLine((*it),255,0,0);
-			//}
+			for(list<LineDetails*>::iterator it = listGoal.begin(); it != listGoal.end(); it++) {
+				bigScreen.renderLine((*it),255,0,0);
+			}
 			
 			//Display goal in small screen if flower and tree display is off
 			if (!treeDisplay) {
@@ -290,9 +290,12 @@ int main() {
 					listGoalClear.push_back(new LineDetails(xmid2, ymid2, xmid2 + getRatio(1), ymid2 + getRatio(1)));
 					
 					//Remove goal area
-					listGoal.erase(it++);
+					listGoal.remove((*it));
 					
-					//exit(1);
+					if (listGoal.size() == 0){
+						exit(0);
+					}
+					break;
 				}
 				else {
 					++it;
