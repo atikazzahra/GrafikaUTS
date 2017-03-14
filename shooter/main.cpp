@@ -409,31 +409,23 @@ void disable_waiting_for_enter(void)
 
 int main(int argc, char** argv){
 
-    parse.parseAdi("shooter/bangunan.txt");
-    parse.parseTree("shooter/tree.txt");
-    v = parse.getPoints();
-    PTree = parse.getTrees();
-    parse2.parseAdi("shooter/jalan.txt");
-    PJalan = parse2.getPoints();
     company.parseAdi("shooter/company.txt");
     uts.parseAdi("shooter/UTS.txt");
     quiz.parseAdi("shooter/quiz.txt");
     tubes.parseAdi("shooter/tubes.txt");
     pencil.parseAdi("shooter/pencil.txt");
+    
     PPencil = pencil.getPoints();
-    // poliRoad();
-    // poliPlant();
-    // poliBuild();
 	PQuiz = quiz.getPoints();
 	PTubes = tubes.getPoints();
 	PCompany = company.getPoints();
 	PUts = uts.getPoints();
 
-
+	bool win = false;
     pthread_t t_shoot;
     pthread_create(&t_shoot, NULL, shoot, NULL);
     pthread_create(&t_bullet, NULL, controller, NULL);
-    while(!isEnd){
+    while(!win){
     	disable_waiting_for_enter();
 
         if (level == 1) drawQuiz();
@@ -443,7 +435,7 @@ int main(int argc, char** argv){
         //Minimap
 
         bool isCollide = isCollison(PBullet, Color::RED); 
-        if (isCollide && level == 4) isEnd = true;
+        if (isCollide && level == 4) win = true;
         else if (isCollide) level++;
 
         drawPencil();
@@ -460,6 +452,9 @@ int main(int argc, char** argv){
         panelMain.EmptyFrame();
         panelSmall.EmptyFrame();
         panelBig.EmptyFrame();
+
+        //game over
+        if (isEnd) exit(1);
     }
     pthread_join(t_bullet, NULL);
     pthread_join(t_shoot, NULL);

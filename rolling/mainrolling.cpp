@@ -65,6 +65,7 @@ void detectKeyStroke(){
 }
 
 int main(int argc, char** argv){
+    
     thread thread1(detectKeyStroke);
     thread thread2(SpawnCircle);
     bool notCollision=true;
@@ -89,7 +90,9 @@ int main(int argc, char** argv){
     if(!notCollision){
 		exit(1);
 	}
+
     thread1.detach();
     thread2.detach();
+    
     return 0;
 }

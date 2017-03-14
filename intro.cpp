@@ -27,7 +27,7 @@ int width = 0, height = 0, screensize = 0;
 int depth = 32;
 
 int main() {
-  // Show Press Enter
+	// Show Press Enter
   DIR *imageFolder;
   char* imagePath;
   int selection = 0, images = 0;
@@ -104,73 +104,18 @@ int main() {
   }
 
   //cleanUp();
-  
-  
-  // Show Tingkat 2
-  draw(getMeta(paths[1]));
-  for(;;) {
-    keyPress = getch();
-    if(keyPress == '\n')
-      break;
-  }
-  cleanUp();
-  int status = system("./rolling-game");
-  printf("status : %d",status);
-  if(status == 0) {
-    // Show Tingkat 3
-    //cleanUp();
-    draw(getMeta(paths[2]));
-    for(;;) {
-      keyPress = getch();
-      if(keyPress == '\n')
-        break;
-    }
-    //cleanUp();
-    status = system("./map-game");
-    if(status == 0) {
-      // Show Tingkat 4
-      cleanUp();
-      draw(getMeta(paths[3]));
-      for(;;) {
-        keyPress = getch();
-        if(keyPress == '\n')
-          break;
-      }
-      cleanUp();
-      status = system("./shooter-game");
-      if(status == 0) {
-        // Show Lulus
-        cleanUp();
-        draw(getMeta(paths[4]));
-        for(;;) {
-          keyPress = getch();
-          if(keyPress == '\n')
-            break;
-        }
-        cleanUp();
-      } else {
-        // Game Over
-        cleanUp();
-        printf("Game Over!\n");
-        draw(getMeta(paths[5]));
-        exit(1);
-      }
-    } else {
-      // Game Over
-      cleanUp();
-      printf("Game Over!\n");
-      draw(getMeta(paths[5]));
-      exit(1);
-    }
-  } else {
-    // Game Over
-    cleanUp();
-    printf("Game Over!\n");
-    draw(getMeta(paths[5]));
-    exit(1);
-  }
-  
-  return 0;
+	
+	
+	// Show Tingkat 2
+	draw(getMeta(paths[1]));
+	for(;;) {
+		keyPress = getch();
+		if(keyPress == '\n')
+		  break;
+	}
+	cleanUp();
+	
+	return 0;
 }
 
 void cleanUp()
