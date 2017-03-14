@@ -1,5 +1,5 @@
-#ifndef LINE_H
-#define LINE_H
+#ifndef LINE_MAP_H
+#define LINE_MAP_H
 
 #include "framebuffer.h"
 using namespace std;

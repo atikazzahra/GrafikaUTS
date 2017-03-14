@@ -1,4 +1,4 @@
-#include "Screen.h"
+#include "screen_map.h"
 #include "ncurses.h"
 #include <fstream>
 #include <iostream>
@@ -60,7 +60,7 @@ int main() {
 	bool flowerDisplay = 1;
 	
 	//read from file to built ITB depan
-	fstream myfile("coordinat.txt", std::ios_base::in);
+	fstream myfile("map/coordinat.txt", std::ios_base::in);
 	
 	list<int> intList;
 	
@@ -86,7 +86,7 @@ int main() {
 	
 
 	// DRAW TREE
-	fstream treefile("coordinate_tree.txt",std::ios_base::in);
+	fstream treefile("map/coordinate_tree.txt",std::ios_base::in);
 	list<int> intTreeList;
 	
     int b;
@@ -113,7 +113,7 @@ int main() {
 	treefile.close();
 	
 	//Draw Path
-	fstream pathfile("coordinat_path.txt", std::ios_base::in);
+	fstream pathfile("map/coordinat_path.txt", std::ios_base::in);
 
 	list<int> intListP;
 	
@@ -136,7 +136,7 @@ int main() {
 
 	pathfile.close();
 	//Draw FLower
-	fstream flowerfile("coordinat_flower.txt", std::ios_base::in);
+	fstream flowerfile("map/coordinat_flower.txt", std::ios_base::in);
 
 	list<int> intListF;
 	
@@ -160,7 +160,7 @@ int main() {
 	flowerfile.close();
 	
 	//Draw Goal & GoalIcon
-	fstream goalfile("coordinat_goal.txt", std::ios_base::in);
+	fstream goalfile("map/coordinat_goal.txt", std::ios_base::in);
 
 	list<int> intListG;
 	

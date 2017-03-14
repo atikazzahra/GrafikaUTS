@@ -1,7 +1,7 @@
-#ifndef SCREEN_H
-#define SCREEN_H
+#ifndef SCREEN_MAP_H
+#define SCREEN_MAP_H
 
-#include "line.h"
+#include "line_map.h"
 #include "LineDetails.h"
 
 /// Constants for Screen's border color
