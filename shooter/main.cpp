@@ -3,6 +3,7 @@
 #include "poligon.h"
 #include "parser.h"
 #include <pthread.h>
+#include <thread>
 #include <termios.h>
 
 static struct termios oldt;
@@ -44,8 +45,8 @@ int utsIdx = 0;
 bool isEnd = false;
 char c;
 
-void *controller(void *args){
-    while(!isEnd){
+void controller(){
+    while(1){
         c = getchar();
         if (c == 'q'){
             bTree = true;
@@ -318,8 +319,8 @@ void moveVertical(std::vector<std::vector<Point> > * P, int dy) {
     peluru dibuat dan dimasukkan kedalam vector
     tujuannya biar bisa nembak beberapa kali dalam satu waktu
 */
-void * shoot(void * arg) {
-    while(!isEnd) {
+void shoot() {
+    while(1) {
         if (c == '\n') {
             int x[1] = {shooterXPos};
             int y[2] = {shooterYPos, shooterYPos - 5};
@@ -414,7 +415,7 @@ int main(int argc, char** argv){
     quiz.parseAdi("shooter/quiz.txt");
     tubes.parseAdi("shooter/tubes.txt");
     pencil.parseAdi("shooter/pencil.txt");
-    
+
     PPencil = pencil.getPoints();
 	PQuiz = quiz.getPoints();
 	PTubes = tubes.getPoints();
@@ -422,9 +423,8 @@ int main(int argc, char** argv){
 	PUts = uts.getPoints();
 
 	bool win = false;
-    pthread_t t_shoot;
-    pthread_create(&t_shoot, NULL, shoot, NULL);
-    pthread_create(&t_bullet, NULL, controller, NULL);
+    thread t_shoot(shoot);
+    thread t_keyPress(controller);
     while(!win){
     	disable_waiting_for_enter();
 
@@ -456,8 +456,8 @@ int main(int argc, char** argv){
         //game over
         if (isEnd) exit(1);
     }
-    pthread_join(t_bullet, NULL);
-    pthread_join(t_shoot, NULL);
+    t_keyPress.detach();
+    t_shoot.detach();
 
     return 0;
 }
