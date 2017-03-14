@@ -1,4 +1,5 @@
 sudo ./intro
+sudo ./overlap
 sudo ./rolling-game
 OUT=$?
 if [ $OUT -eq 0 ];

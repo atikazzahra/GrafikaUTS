@@ -7,6 +7,7 @@ rolling: rolling/mainrolling.cpp
 
 all:
 	g++ map/main.cpp -std=c++11 -lncurses -o map-game
+	g++ map/d_overlap.cpp -std=c++11 -o overlap
 	g++ shooter/main.cpp -std=c++11 -lpthread -lm -o shooter-game
 	g++ rolling/mainrolling.cpp -std=c++11 -lpthread -o rolling-game
 	g++ main-game.cpp getch.c byteconversion.c framebufferimage.c -o main-game
