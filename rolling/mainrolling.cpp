@@ -83,10 +83,13 @@ int main(int argc, char** argv){
         } else {
 			break;
 		}
-		
         fp.Draw();
         panelBig.EmptyFrame();   
     }
+    
+    if(!notCollision){
+		exit(1);
+	}
 
     thread1.detach();
     thread2.detach();

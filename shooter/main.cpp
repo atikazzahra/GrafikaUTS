@@ -105,7 +105,8 @@ void *controller(void *args){
                 for (int j = 0; j < PPencil[i].size(); j++) {
                     Point p = PPencil[i].at(0);
                     PPencil[i].erase(PPencil[i].begin());
-                    p.setX(p.getX() - 5);
+                    if (p.getX() > 5)
+                    	p.setX(p.getX() - 5);
                     PPencil[i].push_back(p);
                 }
             }
@@ -117,7 +118,8 @@ void *controller(void *args){
                 for (int j = 0; j < PPencil[i].size(); j++) {
                     Point p = PPencil[i].at(0);
                     PPencil[i].erase(PPencil[i].begin());
-                    p.setX(p.getX() + 5);
+                    if (p.getX() < 1050)
+                    	p.setX(p.getX() + 5);
                     PPencil[i].push_back(p);
                 }
             }
@@ -206,7 +208,7 @@ void drawUTS() {
 				PUts[i][j].setY(PUts[i][j].getY() - 6);	
 			}			
 		}
-		if (PUts[0][0].getX() > 1400) {
+		if (PUts[0][0].getX() > 1055) {
 			isEnd = true; //Kalah
 		}
 		utsIdx++;
@@ -225,7 +227,7 @@ void drawTubes() {
 			PTubes[i][j].setX(PTubes[i][j].getX() + 8);
 			PTubes[i][j].setY(PTubes[i][j].getY() + 8);
 		}
-		if (PTubes[0][0].getX() > 1400) {
+		if (PTubes[0][0].getX() > 1055) {
 			isEnd = true; //Kalah
 		}
         Poligon shape = Poligon();
@@ -247,7 +249,7 @@ void drawKP() {
 				PCompany[i][j].setY(PCompany[i][j].getY() + 10);
 			}			
 		}
-		if (PCompany[0][0].getX() > 1400) {
+		if (PCompany[0][0].getX() > 1055) {
 			isEnd = true; //Kalah
 		}
 		kpIdx++;
@@ -264,7 +266,7 @@ void drawQuiz() {
 		for (int j = 0; j < PQuiz[i].size(); j++) {
 			PQuiz[i][j].setX(PQuiz[i][j].getX() + 5);
 		}
-		if (PQuiz[0][0].getX() > 1400) {
+		if (PQuiz[0][0].getX() > 1055) {
 			isEnd = true; //Kalah
 		}
         Poligon shape = Poligon();
@@ -359,7 +361,7 @@ bool isCollison(std::vector<std::vector<Point> > obj, Color color) {
 /* flood fill algorithm*/
 void floodFill(FramePanel * vp, int x, int y, Color color) {
     int tempX, tempY;
-    if((x > 0) && (x < 1350) && (y > 0) && (y < 750)) {
+    if((x > 0) && (x < 1055) && (y > 0) && (y < 750)) {
         tempX = x; tempY = y+1;
         if (!vp->get(tempX, tempY).equals(color)) {
             vp->set(color, tempX, tempY);
@@ -407,45 +409,24 @@ void disable_waiting_for_enter(void)
 
 int main(int argc, char** argv){
 
-    parse.parseAdi("shooter/bangunan.txt");
-    parse.parseTree("shooter/tree.txt");
-    v = parse.getPoints();
-    PTree = parse.getTrees();
-    parse2.parseAdi("shooter/jalan.txt");
-    PJalan = parse2.getPoints();
     company.parseAdi("shooter/company.txt");
     uts.parseAdi("shooter/UTS.txt");
     quiz.parseAdi("shooter/quiz.txt");
     tubes.parseAdi("shooter/tubes.txt");
     pencil.parseAdi("shooter/pencil.txt");
+    
     PPencil = pencil.getPoints();
-    // poliRoad();
-    // poliPlant();
-    // poliBuild();
 	PQuiz = quiz.getPoints();
 	PTubes = tubes.getPoints();
 	PCompany = company.getPoints();
 	PUts = uts.getPoints();
 
-
+	bool win = false;
     pthread_t t_shoot;
     pthread_create(&t_shoot, NULL, shoot, NULL);
     pthread_create(&t_bullet, NULL, controller, NULL);
-    while(!isEnd){
+    while(!win){
     	disable_waiting_for_enter();
-        //Draw Bangunan
-        // if(bBuilding){   
-        //     drawBuilding();
-        // }
-
-        // if(bTree){   
-        //     //Draw Tree 
-        //     drawTree();
-        // }
-
-        // if(bRoad){    
-        //     drawRoad();
-        // }
 
         if (level == 1) drawQuiz();
         else if (level == 2) drawTubes();
@@ -454,7 +435,7 @@ int main(int argc, char** argv){
         //Minimap
 
         bool isCollide = isCollison(PBullet, Color::RED); 
-        if (isCollide && level == 4) isEnd = true;
+        if (isCollide && level == 4) win = true;
         else if (isCollide) level++;
 
         drawPencil();
@@ -463,32 +444,17 @@ int main(int argc, char** argv){
         floodFill(&panelForShooter, shooterXPos, 580, Color::WHITE);
 
         moveVertical(&PBullet, -10);
-        // for(int i = 0; i < vPoligon.size(); i++){
-        //     Poligon Shape = Poligon();
-        //     Shape = vPoligon[i];
-        //     Shape.scalePolygon(0.5,0.5);
-        //     Shape.draw(&panelMiniMap);
-        // }
-        
-        // //ZoomSelector
-        // for(int i = 0; i<vPoligon.size();i++){
-        //     vPoligon[i].drawInside(&panelSmall, &panelBig);
-        // }
-
-        //draw semua
-        // a.drawFrame(panelMain);
-        // a.drawFrame(panelMiniMap);
-        // a.drawFrame(panelBig);
-        // a.drawFrame(panelSmall);
         
         a.drawFrame(panelForShooter);
-        // a.Draw();
         
 
         panelForShooter.EmptyFrame();
         panelMain.EmptyFrame();
         panelSmall.EmptyFrame();
         panelBig.EmptyFrame();
+
+        //game over
+        if (isEnd) exit(1);
     }
     pthread_join(t_bullet, NULL);
     pthread_join(t_shoot, NULL);

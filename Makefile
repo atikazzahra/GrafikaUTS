@@ -10,7 +10,9 @@ all:
 	g++ shooter/main.cpp -std=c++11 -lpthread -lm -o shooter-game
 	g++ rolling/mainrolling.cpp -std=c++11 -lpthread -o rolling-game
 	g++ main-game.cpp getch.c byteconversion.c framebufferimage.c -o main-game
+
 	g++ intro.cpp getch.c byteconversion.c framebufferimage.c -o intro
 	g++ trans1.cpp getch.c byteconversion.c framebufferimage.c -o trans1
 	g++ trans2.cpp getch.c byteconversion.c framebufferimage.c -o trans2
 	g++ finish.cpp getch.c byteconversion.c framebufferimage.c -o finish
+	g++ game-over.cpp getch.c byteconversion.c framebufferimage.c -o game-over

@@ -1,7 +1,26 @@
 sudo ./intro
 sudo ./rolling-game
-sudo ./trans1
-sudo ./shooter-game
-sudo ./trans2
-sudo ./map-game
-sudo ./finish
+OUT=$?
+if [$OUT -eq 0];
+then
+	sudo ./trans1
+	sudo ./shooter-game
+	OUT=$?
+	if [$OUT -eq 0];
+	then
+		sudo ./trans2
+		sudo ./map-game
+		OUT=$?
+		if [$OUT -eq 0];
+		then
+			sudo ./finish
+		else
+			sudo ./game-over
+		fi
+	else 
+		sudo ./game-over
+	fi
+	
+else
+	sudo ./game-over
+fi
