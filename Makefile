@@ -14,3 +14,4 @@ all:
 	g++ trans1.cpp getch.c byteconversion.c framebufferimage.c -o trans1
 	g++ trans2.cpp getch.c byteconversion.c framebufferimage.c -o trans2
 	g++ finish.cpp getch.c byteconversion.c framebufferimage.c -o finish
+	g++ game-over.cpp getch.c byteconversion.c framebufferimage.c -o game-over
