@@ -35,7 +35,8 @@ std::vector<std::vector<Point> > PBullet;
 FramePanel panelSmall(100, 100, 50, 50);
 FramePanel panelBig(500, 500, 500, 0);
 FramePanel panelMiniMap(100, 100, 250, 600);
-FramePanel panelForShooter(1355, 750, 0, 0);
+//FramePanel panelForShooter(1355, 750, 0, 0);
+FramePanel panelForShooter(1055, 750, 0, 0);
 
 int score = 0, level = 1, shooterXPos = 109, shooterYPos = 548, nBullet;
 int kpIdx = 0;
@@ -406,17 +407,17 @@ void disable_waiting_for_enter(void)
 
 int main(int argc, char** argv){
 
-    parse.parseAdi("bangunan.txt");
-    parse.parseTree("tree.txt");
+    parse.parseAdi("shooter/bangunan.txt");
+    parse.parseTree("shooter/tree.txt");
     v = parse.getPoints();
     PTree = parse.getTrees();
-    parse2.parseAdi("jalan.txt");
+    parse2.parseAdi("shooter/jalan.txt");
     PJalan = parse2.getPoints();
-    company.parseAdi("company.txt");
-    uts.parseAdi("UTS.txt");
-    quiz.parseAdi("quiz.txt");
-    tubes.parseAdi("tubes.txt");
-    pencil.parseAdi("pencil.txt");
+    company.parseAdi("shooter/company.txt");
+    uts.parseAdi("shooter/UTS.txt");
+    quiz.parseAdi("shooter/quiz.txt");
+    tubes.parseAdi("shooter/tubes.txt");
+    pencil.parseAdi("shooter/pencil.txt");
     PPencil = pencil.getPoints();
     // poliRoad();
     // poliPlant();
