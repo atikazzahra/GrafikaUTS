@@ -2,11 +2,10 @@
 #include <stdio.h>
 
 int main() {
-	printf("test\n");
+	//printf("test\n");
 	Overlap O;
 	O.initMatrix();
 	O.printLogo();
-	int t;
-	std::cin >> t;
+	sleep(1);
 	return 0;
 }
