@@ -1,4 +1,4 @@
-#include "Screen.h"
+#include "screen_map.h"
 #include "ncurses.h"
 #include <fstream>
 #include <iostream>
