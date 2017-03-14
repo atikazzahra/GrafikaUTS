@@ -92,33 +92,60 @@ int main() {
   width = finfo.line_length / (depth/8);
   height = (screensize / (depth/8)) / width;
   frameBuffer = (char *) mmap(0, screensize, PROT_READ | PROT_WRITE, MAP_SHARED, frameBufferFD, 0);
+  
+  int level = 0;
       
-  draw(getMeta(paths[0]));
+  draw(getMeta(paths[level]));
   for(;;) {
     unsigned char keyPress = getch();
     if(keyPress == '\n')
       break;
   }
 
-  cleanUp();
+  //cleanUp();
+	
 	
 	// Show Tingkat 2
 	draw(getMeta(paths[1]));
+	for(;;) {
+		unsigned char keyPress = getch();
+		if(keyPress == '\n')
+		  break;
+	}
+	cleanUp();
 	int status = system("./rolling-game");
 	if(status == 0) {
 		// Show Tingkat 3
 		cleanUp();
 		draw(getMeta(paths[2]));
+		for(;;) {
+			unsigned char keyPress = getch();
+			if(keyPress == '\n')
+			  break;
+		}
+		cleanUp();
 		int status2 = system("./shooter-game");
 		if(status2 == 0) {
 			// Show Tingkat 4
 			cleanUp();
 			draw(getMeta(paths[3]));
+			for(;;) {
+				unsigned char keyPress = getch();
+				if(keyPress == '\n')
+				  break;
+			}
+			cleanUp();
 			int status3 = system("./map-game");
 			if(status3 == 0) {
 				// Show Lulus
 				cleanUp();
 				draw(getMeta(paths[4]));
+				for(;;) {
+					unsigned char keyPress = getch();
+					if(keyPress == '\n')
+						break;
+				}
+				cleanUp();
 			} else {
 				// Game Over
 				printf("Game Over!\n");

@@ -60,9 +60,6 @@ void detectKeyStroke(){
                 player.emptyVector();
                 usleep(3000);
             }
-            
-            
-            
         }
     }
 }
@@ -82,12 +79,16 @@ int main(int argc, char** argv){
             Circle Ball1(radius,something, somethingY, 1);
             notCollision=Ball1.draw(&panelBig, Color::GREEN);   
             fp.drawFrame(panelBig);
-        }
-        
+        } else {
+			break;
+		}
         fp.Draw();
         panelBig.EmptyFrame();   
     }
-    printf("HJAHAHAHAHAHAHAHAHAHAHAHAHAAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAAHAHAHA\n");
+    
+    if(!notCollision){
+		exit(1);
+	}
     thread1.detach();
     thread2.detach();
     return 0;
