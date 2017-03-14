@@ -83,26 +83,64 @@ class Overlap : public Framebuffer {
 			//V1
 			
 			//I
+			for(i=369;i<=378;i++) {
+				for(j=261;j<=336;j++) {
+					m[i][j][2] = COLOR_1;
+				}
+			}
 			
 			//V2
 			
 			//E
+			for(j=261;j<=336;j++) {
+				for(i=484;i<=494;i++) {
+					m[i][j][2] = COLOR_1;
+				}
+			}
+			for(i=494;i<=518;i++) {
+				for(j=261;j<=276;j++) {
+					m[i][j][2] = COLOR_1;
+				}
+				for(j=291;j<=306;j++) {
+					m[i][j][2] = COLOR_1;
+				}
+				for(j=321;j<=336;j++) {
+					m[i][j][2] = COLOR_1;
+				}
+			}
 		}
 
 		void printLogo() {
 			//print front layer
 			for(i=0;i<=600;i++) {
 				for(j=0;j<=600;j++) {
-					if (m[i][j][1] != 0)
-						fb.putPixel(i,j,255,0,0); //sementara merah; nanti pake constant aja
+					if (m[i][j][2] != 0) {
+						if (m[i][j][2] == COLOR_1) {
+							fb.putPixel(i,j,255,0,0); //sementara merah; nanti pake constant aja
+						//add additional cases here
+					}
 				}
 			}
 
-			//print back layer
+			//print middle layer
 			for(i=0;i<=600;i++) {
 				for(j=0;j<=600;j++) {
-					if (m[i][j][0] != 0 && m[i][j][1] == 0)
-						fb.putPixel(i,j,255,0,0); //idem
+					if (m[i][j][1] != 0 && m[i][j][2] == 0) {
+						if (m[i][j][1] == COLOR_1) {
+							fb.putPixel(i,j,255,0,0); //idem
+						}
+					}
+				}
+			}
+			
+			//print front layer
+			for(i=0;i<=600;i++) {
+				for(j=0;j<=600;j++) {
+					if (m[i][j][0] != 0 && m[i][j][1] == 0) {
+						if (m[i][j][0] == COLOR_1) {
+							fb.putPixel(i,j,255,0,0); //idem
+						}
+					}
 				}
 			}
 		}
